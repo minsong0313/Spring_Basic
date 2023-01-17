@@ -7,9 +7,9 @@ import hello.core.member.MemberServiceImpl;
 
 public class MemberApp {
     public static void main(String[] args) {
-        //memberA라는 이름의 회원을 생성하고 회원가입
-        MemberService memberService = new MemberServiceImpl();
-        Member member = new Member(1L, "memberA", Grade.VIP); //id는 Long타입이니까 숫자뒤에 L붙여줘야함
+        AppConfig appConfig = new AppConfig();
+        MemberService memberService = appConfig.memberService(); //memberService에 memberServiceImpl이 들어가있음
+        Member member = new Member(1L, "memberA", Grade.VIP);
         memberService.join(member);
 
         //등록된 id로 회원조회
