@@ -1,5 +1,6 @@
 package hello.core.order;
 
+import hello.core.annotation.MainDiscountPolicy;
 import hello.core.discount.DiscountPolicy;
 import hello.core.discount.FixDiscountPolicy;
 import hello.core.discount.RateDiscountPolicy;
@@ -8,15 +9,22 @@ import hello.core.member.MemberRepository;
 import hello.core.member.MemoryMemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService{
 
     private final MemberRepository memberRepository;
     private final DiscountPolicy discountPolicy;
 
+    //1.생성자주입 - 생성자가 하나면 @Autowired 생략가능
+    @Autowired
+    public OrderServiceImpl(MemberRepository memberRepository, @MainDiscountPolicy DiscountPolicy discountPolicy) {
+        this.memberRepository = memberRepository;
+        this.discountPolicy = discountPolicy;
+        //discountPolicy는 fix가 들어올지 rate가 들어올지 전혀 모름, 그냥 로직만 실행하면 됨
+    }
 
     /* 2.수정자주입(setter주입)
     @Autowired
@@ -43,13 +51,6 @@ public class OrderServiceImpl implements OrderService{
     }
      */
 
-    /*1.생성자주입 - 생성자가 하나면 @Autowired 생략가능
-    public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
-        this.memberRepository = memberRepository;
-        this.discountPolicy = discountPolicy;
-        //discountPolicy는 fix가 들어올지 rate가 들어올지 전혀 모름, 그냥 로직만 실행하면 됨
-    }
-     */
 
     @Override
     public Order createOrder(Long memberId, String itemName, int itemPrice) {
